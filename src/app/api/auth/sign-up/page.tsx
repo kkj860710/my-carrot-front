@@ -3,7 +3,7 @@
 import { Formik } from 'formik';
 import { UserType } from '@/types/common';
 import axios from "@/utils/axios";
-import {useRouter} from "next/router";
+import {useRouter} from "next/navigation";
 
 
 const SignUp = () => {

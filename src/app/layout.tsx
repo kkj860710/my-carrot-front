@@ -4,7 +4,7 @@ import NavBar from "@/components/common/NavBar";
 import React from "react";
 import '../styles/globals.css'
 import Footer from "@/components/common/Footer";
-import {SessionProvider} from "next-auth/react";
+import {SessionProvider, useSession} from "next-auth/react";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",

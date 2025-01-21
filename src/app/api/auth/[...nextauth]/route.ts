@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "@/utils/axios";
 
 /**
  * NextAuthOptions 설정
@@ -7,19 +8,25 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "Input Name" },
+        username: { label: "Username", type: "text", placeholder: "Input UserName" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+        const {data, status} = await axios.post('/user/sign-in', {
+          userLoginId: credentials?.username,
+          userPassword: credentials?.password
+        })
+        let user;
+        if( status === 200 || status === 201) {
+          delete data.userPassword;
+          user = data;
+        } else {
+          user = null;
+        }
+        console.log(user);
+        // const user = { id: "1", name: "J Smith", email: "jsmith@example.com", role: "admin" }
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
@@ -35,6 +42,10 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    maxAge: 30 & 24 * 60 * 60,   // 30일 기한 설정
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {

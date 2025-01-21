@@ -24,7 +24,7 @@ const NavItem = ( { mobile }  : {mobile?: boolean}) => {
                     <button onClick={() => signIn()}>Sign In</button>
                 </li>
                 <li className="py-2 text-center border-b-4 cursor-pointer">
-                    <Link href="/sign-up">Sign Up</Link>
+                    <Link href="/api/auth/sign-up">Sign Up</Link>
                 </li>
                 </>
             )}
