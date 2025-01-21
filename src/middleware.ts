@@ -6,7 +6,7 @@ export { default } from "next-auth/middleware"
 export async function middleware (req : NextRequest) {
     const session = await getToken({req, secret: process.env.JWT_SECRET});
     const pathname = req.nextUrl.pathname;
-    console.log(session);
+
     // user만 접근 가능한 페이지
     if(pathname.startsWith('/user') && !session) {
         return NextResponse.redirect(new URL('/api/auth/signin', req.url))

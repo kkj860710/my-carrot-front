@@ -1,7 +1,7 @@
 'use client';
 
-import { Formik } from 'formik';
-import { UserType } from '@/types/common';
+import {Formik} from 'formik';
+import {UserType} from '@/types/common';
 import axios from "@/utils/axios";
 import {useRouter} from "next/navigation";
 
@@ -147,7 +147,7 @@ const SignUp = () => {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                                className="w-full py-2 rounded-lg  focus:outline-none focus:ring-2 focus:ring-offset-2"
                             >
                                 회원가입
                             </button>

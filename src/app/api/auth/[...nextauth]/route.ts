@@ -14,6 +14,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
+
         const {data, status} = await axios.post('/user/sign-in', {
           userLoginId: credentials?.username,
           userPassword: credentials?.password
@@ -46,6 +47,9 @@ export const authOptions: NextAuthOptions = {
   jwt: {
     secret: process.env.JWT_SECRET,
     maxAge: 30 & 24 * 60 * 60,   // 30일 기한 설정
+  },
+  pages : {
+    signIn: "/api/auth/sign-in"
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
