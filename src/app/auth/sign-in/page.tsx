@@ -1,36 +1,49 @@
 'use client';
 
-import {Formik} from 'formik';
-import {UserType} from '@/types/common';
-import axios from "@/utils/axios";
+import {Formik} from "formik";
+import {UserType} from "@/types/common";
+import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
 
+interface LonginValue {
+    userLoginId: string;
+    userPassword: string;
+}
 
-const SignUp = () => {
+const SignIn = () => {
     const router = useRouter();
-
-    const initialValues: UserType = {
+    const initialValues: LonginValue = {
         userLoginId: '',
         userPassword: '',
-        userName: '',
-        userEmail: '',
-        userPhoneNo: '',
-        userBirthday: '',
     };
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-                    회원가입
+                    로그인
                 </h2>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={async (values, {setSubmitting,}) => {
-                        const response = await axios.post('/user/sign-up', values, {})
-                        if(response.status === 200 || response.status === 201) {
+                        try {
+                            const res = await signIn("credentials", {
+                                username: values.userLoginId,
+                                password: values.userPassword,
+                                redirect: false, // 리다이렉트를 방지
+                            });
+
+                            if (res?.ok) {
+                                console.log("Login successful");
+                                // 로그인 성공 시 원하는 페이지로 이동
+                                router.push("/");
+                            } else {
+                                console.error("Login failed");
+                            }
+                        } catch (error) {
+                            console.error("Error during sign in", error);
+                        } finally {
                             setSubmitting(false);
-                            router.push('/');
                         }
                     }}
                     validate={(values) => {
@@ -38,9 +51,7 @@ const SignUp = () => {
                         if (!values.userLoginId) {
                             errors.userLoginId = '아이디는 필수 항목입니다.';
                         }
-                        if (!values.userName) {
-                            errors.userName = '이름은 필수 항목입니다.';
-                        }
+
                         if (!values.userPassword) {
                             errors.userPassword = '비밀번호는 필수 항목입니다.';
                         }
@@ -89,74 +100,20 @@ const SignUp = () => {
                                     <p className="text-red-500 text-sm">{errors.userPassword}</p>
                                 )}
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    이름
-                                </label>
-                                <input
-                                    type="text"
-                                    name="userName"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.userName}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                                {errors.userName && touched.userName && (
-                                    <p className="text-red-500 text-sm">{errors.userName}</p>
-                                )}
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    이메일
-                                </label>
-                                <input
-                                    type="email"
-                                    name="userEmail"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.userEmail}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    전화번호
-                                </label>
-                                <input
-                                    type="text"
-                                    name="userPhoneNo"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.userPhoneNo}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    생년월일
-                                </label>
-                                <input
-                                    type="date"
-                                    name="userBirthday"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.userBirthday}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                            </div>
+
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
                                 className="w-full py-2 rounded-lg  focus:outline-none focus:ring-2 focus:ring-offset-2"
                             >
-                                회원가입
+                                로그인
                             </button>
                         </form>
                     )}
                 </Formik>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default SignUp;
+export default SignIn;

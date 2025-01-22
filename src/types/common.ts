@@ -3,10 +3,12 @@ import { z } from "zod";
 export interface UserType {
     userLoginId: string;
     userPassword: string;
+    userPasswordConfirm: string;
     userName: string;
     userEmail?: string;
     userPhoneNo?: string;
-    userBirthday?: strings;
+    userBirthday?: string;
+    role: string;
 }
 
 
