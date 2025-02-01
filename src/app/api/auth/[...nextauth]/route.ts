@@ -14,22 +14,26 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        console.log(credentials);
-        const {data, status} = await axios.post(process.env.NEXT_PUBLIC_API + 'user/sign-in', {
+
+        if(!credentials?.username || !credentials?.password) {
+          throw new Error("Username or password is required");
+        }
+
+        const response = await axios.post(process.env.NEXT_PUBLIC_API + 'user/sign-in', {
           userLoginId: credentials?.username,
           userPassword: credentials?.password
         })
+
         let user;
-        if( status === 200 || status === 201) {
-          delete data.userPassword;
-          user = data;
+        if( response.status === 200 || response.status === 201) {
+          // delete response.data.userPassword;
+          user = response.data;
         } else {
           user = null;
+          throw new Error("유효한 사용자가 없습니다.")
         }
         if (user) {
           return user
-        } else {
-          return null
         }
       }
     })

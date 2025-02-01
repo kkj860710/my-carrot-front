@@ -4,6 +4,7 @@ import {Formik} from "formik";
 import {UserType} from "@/types/common";
 import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
+import axios from "axios";
 
 interface LonginValue {
     userLoginId: string;
@@ -27,21 +28,29 @@ const SignIn = () => {
                     initialValues={initialValues}
                     onSubmit={async (values, {setSubmitting,}) => {
                         try {
-                            const res = await signIn("credentials", {
+
+                            const res = await axios.post("/api/sign-in", {
                                 username: values.userLoginId,
                                 password: values.userPassword,
-                                redirect: false, // 리다이렉트를 방지
                             });
 
-                            if (res?.ok) {
-                                console.log("Login successful");
-                                // 로그인 성공 시 원하는 페이지로 이동
-                                router.push("/");
-                            } else {
-                                console.error("Login failed");
-                            }
+                            // const res = await signIn("credentials", {
+                            //     username: values.userLoginId,
+                            //     password: values.userPassword,
+                            //     redirect: false, // 리다이렉트를 방지
+                            // });
+                            //
+                            // if (res?.ok) {
+                            //     console.log("Login successful");
+                            //     // 로그인 성공 시 원하는 페이지로 이동
+                            //     router.push("/");
+                            //     // todo kkj 실패시 다이얼로그 처리
+                            // } else {
+                            //     console.error("Login failed");
+                            // }
                         } catch (error) {
-                            console.error("Error during sign in", error);
+                            console.log(error);
+                            throw new Error("Error during sign in");
                         } finally {
                             setSubmitting(false);
                         }
