@@ -1,10 +1,16 @@
 'use client'
 import React from "react";
 import Link from "next/link";
-import {signOut, useSession} from "next-auth/react";
+import {signOut} from "next-auth/react";
 
+// interface NavBarProps {
+//     currentUser?: never;
+// }
 
-const NavItem = async ({ mobile }: { mobile?: boolean }) => {
+const NavItem = ({mobile} : { mobile?: boolean })=> {
+    // const {data: session, status}= useSession();
+    // console.log("NavItem", currentUser);
+
 
     return (
         <ul className={`text-md justify-center flex gap-4 w-full items-center ${mobile && "flex-col h-full"}`}>
@@ -29,3 +35,4 @@ const NavItem = async ({ mobile }: { mobile?: boolean }) => {
 };
 
 export default NavItem;
+

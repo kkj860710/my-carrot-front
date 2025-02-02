@@ -1,15 +1,21 @@
 'use client'
-
-import React, {useState} from 'react';
 import Link from "next/link";
 import NavItem from "@/components/common/NavItem";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
+import {toggleMenu} from "@/redux/slices/menuSlice";
 
+// interface NavBarProps {
+//     currentUser?: never;
+// }
 
-const NavBar = () => {
-    const [menu, setMenu] = useState(false)
+const NavBar  = () => {
+
+    const dispatch = useDispatch();
+    const menuOpen = useSelector((state: RootState) => state.menu.isOpen);
 
     const handleMenu = () => {
-        setMenu(!menu)
+        dispatch(toggleMenu());
     }
 
     return (
@@ -19,15 +25,15 @@ const NavBar = () => {
                     <Link href="/">Logo</Link>
                 </div>
                 <div className='text-2xl sm:hidden'>
-                    {menu === false ? <button onClick={handleMenu}>+</button> : <button onClick={handleMenu}>-</button>}
+                    {menuOpen === false ? <button onClick={handleMenu}>+</button> : <button onClick={handleMenu}>-</button>}
                 </div>
                 <div className='hidden sm:block'>
 
-                    <NavItem />
+                    <NavItem  />
                 </div>
             </div>
             <div className='block sm:hidden'>
-                {(menu === false) ? null : <NavItem mobile />}
+                {(menuOpen === false) ? null : <NavItem mobile />}
             </div>
         </nav>
     )

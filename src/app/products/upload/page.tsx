@@ -1,20 +1,21 @@
 'use client'
 
 import {Formik} from "formik";
-import {UserType} from "@/types/common";
 import {signIn} from "next-auth/react";
+import {UserType} from "@/types/common";
 import {useRouter} from "next/navigation";
 
-interface LonginValue {
-    userLoginId: string;
-    userPassword: string;
-}
-
-const LogIn = () => {
+const UploadPage = () =>{
     const router = useRouter();
-    const initialValues: LonginValue = {
+    const initialValues: UserType = {
         userLoginId: '',
         userPassword: '',
+        userPasswordConfirm: '',
+        userName: '',
+        userEmail: '',
+        userPhoneNo: '',
+        userBirthDate: undefined,
+        role: 'USER',
     };
 
     return (
@@ -119,4 +120,4 @@ const LogIn = () => {
     )
 }
 
-export default LogIn;
+export default UploadPage;

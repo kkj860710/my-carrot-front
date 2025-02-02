@@ -1,14 +1,22 @@
 import { z } from "zod";
 
 export interface UserType {
-    userLoginId: string;
-    userPassword: string;
-    userPasswordConfirm: string;
-    userName: string;
-    userEmail?: string;
-    userPhoneNo?: string;
-    userBirthday?: string;
-    role: string;
+    id?: number,
+    userId?: string,
+    userLoginId? : string,
+    userPassword? : string,
+    userPasswordConfirm? : string,
+    userEmail? : string,
+    userName? : string,
+    userPhoneNo? : string,
+    userBirthDate? : Date,
+    birthDate? : string,
+    userCreateDate? : Date,
+    userLastDate? : Date,
+    role? : string,
+    iat? : number,
+    exp? : number,
+    jti? : string,
 }
 
 
@@ -30,3 +38,14 @@ export const registerSchema = z.object({
     userPhoneNo: z.number().min(11).max(11, "11개의 숫자 이하로 입력해 주세요"),
     // userBirthDay: z.date().max(new Date(), "오늘보다 이전날짜를 입력해주세요.")
 });
+
+
+export interface ProductType {
+    title: string,
+    description: string,
+    category: number,
+    latitude: number,
+    longitude: number,
+    price: number,
+    imageSrc: string,
+}

@@ -1,6 +1,5 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import axios from "axios";
+import {getServerSession} from "next-auth/next";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 
 
 export async function getSession() {
@@ -10,21 +9,26 @@ export async function getSession() {
 export default async function getCurrentUser() {
     try {
         const session = await getSession();
-
-        if (!session?.user?.userLoginId) {
+        console.log("session :", session);
+        if (!session) {
             return null;
         }
 
-        const currentUser = await axios.post('/api/sign-in', {
-            userLoginId: session.user.userLoginId,
-            userPassword: session.user.userPassword
-        })
-        console.log("curretnInfo" ,currentUser)
-        if(!currentUser) {
-            return null;
-        }
+        // const currentUser = await signIn("credentials", {
+        //     username: session.user.userLoginId,
+        //     password: session.user.userPassword,
+        // });
 
-        return currentUser;
+        // const currentUser = await axios.post('/api/sign-in', {
+        //     userLoginId: session.user.userLoginId,
+        //     userPassword: session.user.userPassword
+        // })
+        // console.log("currentUser", currentUser)
+        // if(!currentUser) {
+        //     return null;
+        // }
+
+        return session.user;
     } catch (error) {
         console.error("Error fetching current user:", error);
         return null;

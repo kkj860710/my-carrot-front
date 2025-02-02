@@ -17,7 +17,7 @@ const SignUp = () => {
         userName: '',
         userEmail: '',
         userPhoneNo: '',
-        userBirthday: '',
+        // birthDate: '',
         role: 'USER',
     };
 
@@ -162,10 +162,10 @@ const SignUp = () => {
                                 </label>
                                 <input
                                     type="date"
-                                    name="userBirthday"
+                                    name="userBirthDate"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.userBirthday}
+                                    value={values.birthDate}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
                             </div>

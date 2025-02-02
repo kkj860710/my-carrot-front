@@ -4,12 +4,16 @@ import {getToken} from "next-auth/jwt";
 export { default } from "next-auth/middleware"
 
 export async function middleware (req : NextRequest) {
-    const session = await getToken({req, secret: process.env.JWT_SECRET});
+
+    const session = await getToken({req, secret: process.env.NEXTAUTH_JWT_SECRET});
+
+    // console.log("session", session);
+
     const pathname = req.nextUrl.pathname;
 
     // user만 접근 가능한 페이지
     if(pathname.startsWith('/user') && !session) {
-        return NextResponse.redirect(new URL('/api/auth/signin', req.url))
+        return NextResponse.redirect(new URL('/user', req.url))
     }
     // admin만 접근 가능한 페이지
     if(pathname.startsWith('/admin') && (session?.role !== "ADMIN")) {
