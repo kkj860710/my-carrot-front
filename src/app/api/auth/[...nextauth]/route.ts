@@ -2,9 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
-/**
- * NextAuthOptions 설정
- */
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -24,17 +21,14 @@ export const authOptions: NextAuthOptions = {
           userPassword: credentials?.password
         })
 
-        let user;
+        let user = null;
         if( response.status === 200 || response.status === 201) {
           // delete response.data.userPassword;
           user = response.data;
         } else {
-          user = null;
           throw new Error("유효한 사용자가 없습니다.")
         }
-        if (user) {
-          return user
-        }
+        return user
       }
     })
   ],
@@ -42,11 +36,11 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
-    maxAge: 30 & 24 * 60 * 60,   // 30일 기한 설정
+    secret: process.env.NEXTAUTH_JWT_SECRET,
+    maxAge: 30 * 24 * 60 * 60,   // ✅ 30일을 초 단위로 설정
   },
   pages : {
-    signIn: "/app/auth/sign-in"
+    signIn: "app/auth/sign-in"
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
@@ -55,7 +49,7 @@ export const authOptions: NextAuthOptions = {
     async redirect({ url, baseUrl }) {
       return baseUrl
     },
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       session.user = token
       return session
     },
